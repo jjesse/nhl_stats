@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NHL Stats</title>
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+  <header>
+    <h1>NHL Stats</h1>
+    <p>Current season snapshot with a dedicated playoffs view.</p>
+    <p id="last-updated" aria-live="polite">Loading latest data...</p>
+  </header>
+
+  <main>
+    <section>
+      <h2>Current Season Standings</h2>
+      <div class="table-wrap">
+        <table aria-label="Current NHL standings">
+          <thead>
+            <tr>
+              <th>Team</th>
+              <th>GP</th>
+              <th>W</th>
+              <th>L</th>
+              <th>OT</th>
+              <th>PTS</th>
+              <th>GF</th>
+              <th>GA</th>
+            </tr>
+          </thead>
+          <tbody id="standings-body">
+            <tr><td colspan="8">Loading standings...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section>
+      <h2>Current Playoffs</h2>
+      <div class="playoff-grid">
+        <article>
+          <h3>Playoff Series</h3>
+          <ul id="playoff-series-list">
+            <li>Loading playoff series...</li>
+          </ul>
+        </article>
+
+        <article>
+          <h3>Playoff Games</h3>
+          <ul id="playoff-games-list">
+            <li>Loading playoff games...</li>
+          </ul>
+        </article>
+
+        <article>
+          <h3>Playoff Team Records</h3>
+          <ul id="playoff-records-list">
+            <li>Loading playoff records...</li>
+          </ul>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <script src="/script.js" defer></script>
+</body>
+</html>
