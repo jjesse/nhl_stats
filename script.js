@@ -5,6 +5,7 @@ const standingsBodyEl = document.getElementById('standings-body');
 const playoffSeriesListEl = document.getElementById('playoff-series-list');
 const playoffGamesListEl = document.getElementById('playoff-games-list');
 const playoffRecordsListEl = document.getElementById('playoff-records-list');
+const PLAYOFF_GAME_TYPE = 3;
 
 const FALLBACK_SNAPSHOT = {
   standings: [
@@ -88,7 +89,11 @@ function renderList(element, items, emptyMessage) {
 
 function buildPlayoffRecords(standings = []) {
   return standings
-    .filter((team) => team.wildcardSequence > 0 || team.divisionSequence > 0)
+    .filter(
+      (team) =>
+        (team.wildcardSequence !== undefined && team.wildcardSequence !== null) ||
+        (team.divisionSequence !== undefined && team.divisionSequence !== null)
+    )
     .sort((a, b) => b.points - a.points)
     .slice(0, 16)
     .map((team) => `${formatTeamName(team)}: ${team.wins ?? 0}-${team.losses ?? 0}-${team.otLosses ?? 0}, ${team.points ?? 0} pts`);
@@ -98,7 +103,7 @@ function buildPlayoffGames(scoreData = {}) {
   const games = scoreData.games || [];
 
   return games
-    .filter((game) => game.gameType === 3)
+    .filter((game) => game.gameType === PLAYOFF_GAME_TYPE)
     .map((game) => {
       const away = game.awayTeam?.abbrev || 'Away';
       const home = game.homeTeam?.abbrev || 'Home';
