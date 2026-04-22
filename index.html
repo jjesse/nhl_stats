@@ -3,65 +3,178 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>NHL Stats</title>
+  <title>NHL Stats 2026</title>
   <link rel="stylesheet" href="/styles.css" />
 </head>
 <body>
   <header>
-    <h1>NHL Stats</h1>
-    <p>Current season snapshot with a dedicated playoffs view.</p>
-    <p id="last-updated" aria-live="polite">Loading latest data...</p>
+    <div class="header-inner">
+      <div class="header-brand">
+        <span class="header-icon" aria-hidden="true">🏒</span>
+        <h1>NHL Stats</h1>
+        <span class="season-badge">2025–26</span>
+      </div>
+      <p id="last-updated" aria-live="polite">Loading data…</p>
+    </div>
   </header>
 
+  <nav class="tab-nav" role="tablist" aria-label="Stats sections">
+    <button class="tab-btn active" data-tab="standings" role="tab" aria-selected="true"  aria-controls="tab-standings">📊 Standings</button>
+    <button class="tab-btn"        data-tab="skaters"  role="tab" aria-selected="false" aria-controls="tab-skaters">🏒 Skater Stats</button>
+    <button class="tab-btn"        data-tab="goalies"  role="tab" aria-selected="false" aria-controls="tab-goalies">🥅 Goalie Stats</button>
+    <button class="tab-btn"        data-tab="playoffs" role="tab" aria-selected="false" aria-controls="tab-playoffs">🏆 Playoffs</button>
+  </nav>
+
   <main>
-    <section>
-      <h2>Current Season Standings</h2>
+
+    <!-- ── Standings ── -->
+    <section id="tab-standings" class="tab-panel active" role="tabpanel">
+      <div class="section-header"><h2>Current Season Standings</h2></div>
       <div class="table-wrap">
         <table aria-label="Current NHL standings">
           <thead>
             <tr>
-              <th>Team</th>
-              <th>GP</th>
-              <th>W</th>
-              <th>L</th>
-              <th>OT</th>
-              <th>PTS</th>
-              <th>GF</th>
-              <th>GA</th>
+              <th class="col-sortable"     data-col="teamName"    data-dir="asc"  title="Team name">Team</th>
+              <th class="col-sortable col-num" data-col="gamesPlayed" data-dir="desc" title="Games Played">GP</th>
+              <th class="col-sortable col-num" data-col="points"      data-dir="desc" title="Points">PTS</th>
+              <th class="col-sortable col-num" data-col="wins"        data-dir="desc" title="Wins">W</th>
+              <th class="col-sortable col-num" data-col="losses"      data-dir="asc"  title="Losses">L</th>
+              <th class="col-sortable col-num" data-col="otLosses"    data-dir="asc"  title="Overtime Losses">OT</th>
+              <th class="col-sortable col-num" data-col="goalFor"     data-dir="desc" title="Goals For">GF</th>
+              <th class="col-sortable col-num" data-col="goalAgainst" data-dir="asc"  title="Goals Against">GA</th>
+              <th class="col-sortable col-num" data-col="goalDiff"    data-dir="desc" title="Goal Differential (GF − GA)">DIFF</th>
             </tr>
           </thead>
           <tbody id="standings-body">
-            <tr><td colspan="8">Loading standings...</td></tr>
+            <tr><td colspan="9">Loading standings…</td></tr>
           </tbody>
         </table>
       </div>
     </section>
 
-    <section>
-      <h2>Current Playoffs</h2>
+    <!-- ── Skater Stats ── -->
+    <section id="tab-skaters" class="tab-panel" role="tabpanel">
+      <div class="section-header"><h2>Skater Stats — 2025–26 Regular Season</h2></div>
+
+      <div class="leaderboard-tabs" role="group" aria-label="Leaderboard preset">
+        <button class="lb-btn active" data-sort="points">🏆 Top Scorers</button>
+        <button class="lb-btn"        data-sort="goals">🎯 Goal Leaders</button>
+        <button class="lb-btn"        data-sort="assists">🍎 Assist Leaders</button>
+        <button class="lb-btn"        data-sort="gameWinningGoals">⚡ GWG Leaders</button>
+      </div>
+
+      <div class="filter-bar">
+        <label class="filter-label">
+          Position
+          <select id="pos-filter">
+            <option value="">All</option>
+            <option value="C">C</option>
+            <option value="L">LW</option>
+            <option value="R">RW</option>
+            <option value="D">D</option>
+          </select>
+        </label>
+        <label class="filter-label">
+          Team
+          <select id="team-filter"><option value="">All Teams</option></select>
+        </label>
+        <label class="filter-label">
+          Min GP
+          <input type="number" id="min-gp-filter" value="10" min="0" max="82" style="width:4rem" />
+        </label>
+        <span id="skater-count" class="result-count"></span>
+      </div>
+
+      <div class="table-wrap">
+        <table id="skater-table" aria-label="NHL skater statistics leaderboard">
+          <thead>
+            <tr>
+              <th class="cell-rank">#</th>
+              <th class="col-sortable"         data-col="skaterFullName"   data-dir="asc"  title="Player name">Player</th>
+              <th class="col-sortable"         data-col="teamAbbrevs"      data-dir="asc"  title="Team">Team</th>
+              <th                              title="Position">Pos</th>
+              <th class="col-sortable col-num" data-col="gamesPlayed"      data-dir="desc" title="Games Played">GP</th>
+              <th class="col-sortable col-num" data-col="goals"            data-dir="desc" title="Goals">G</th>
+              <th class="col-sortable col-num" data-col="assists"          data-dir="desc" title="Assists">A</th>
+              <th class="col-sortable col-num" data-col="points"           data-dir="desc" title="Points (Goals + Assists)">P</th>
+              <th class="col-sortable col-num" data-col="plusMinus"        data-dir="desc" title="Plus/Minus — on-ice goal differential at even strength">+/−</th>
+              <th class="col-sortable col-num" data-col="penaltyMinutes"   data-dir="desc" title="Penalty Minutes">PIM</th>
+              <th class="col-sortable col-num" data-col="pointsPerGame"    data-dir="desc" title="Points per Game played">P/GP</th>
+              <th class="col-sortable col-num" data-col="ppPoints"         data-dir="desc" title="Power-Play Points">PPP</th>
+              <th class="col-sortable col-num" data-col="shPoints"         data-dir="desc" title="Short-Handed Points">SHP</th>
+              <th class="col-sortable col-num" data-col="gameWinningGoals" data-dir="desc" title="Game-Winning Goals — the goal that gives the winner their final margin">GWG</th>
+              <th class="col-sortable col-num" data-col="shots"            data-dir="desc" title="Shots on Goal">SOG</th>
+              <th class="col-sortable col-num" data-col="shootingPctg"     data-dir="desc" title="Shooting Percentage — Goals ÷ Shots × 100">S%</th>
+              <th class="col-sortable col-num" data-col="timeOnIcePerGame" data-dir="desc" title="Average Time on Ice per Game (MM:SS)">TOI/GP</th>
+            </tr>
+          </thead>
+          <tbody id="skater-body">
+            <tr><td colspan="17">Loading skater stats…</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ── Goalie Stats ── -->
+    <section id="tab-goalies" class="tab-panel" role="tabpanel">
+      <div class="section-header"><h2>Goalie Stats — 2025–26 Regular Season</h2></div>
+
+      <div class="filter-bar">
+        <label class="filter-label">
+          Team
+          <select id="goalie-team-filter"><option value="">All Teams</option></select>
+        </label>
+        <label class="filter-label">
+          Min GP
+          <input type="number" id="goalie-min-gp-filter" value="10" min="0" max="82" style="width:4rem" />
+        </label>
+        <span id="goalie-count" class="result-count"></span>
+      </div>
+
+      <div class="table-wrap">
+        <table id="goalie-table" aria-label="NHL goalie statistics leaderboard">
+          <thead>
+            <tr>
+              <th class="cell-rank">#</th>
+              <th class="col-sortable"         data-col="goalieFullName"      data-dir="asc"  title="Goalie name">Goalie</th>
+              <th class="col-sortable"         data-col="teamAbbrevs"         data-dir="asc"  title="Team">Team</th>
+              <th class="col-sortable col-num" data-col="wins"                data-dir="desc" title="Wins">W</th>
+              <th                    col-num   title="Losses">L</th>
+              <th                    col-num   title="Overtime Losses">OT</th>
+              <th class="col-sortable col-num" data-col="gamesPlayed"         data-dir="desc" title="Games Played">GP</th>
+              <th class="col-sortable col-num" data-col="gamesStarted"        data-dir="desc" title="Games Started">GS</th>
+              <th class="col-sortable col-num" data-col="savePctg"            data-dir="desc" title="Save Percentage — Saves ÷ Shots Against">SV%</th>
+              <th class="col-sortable col-num" data-col="goalsAgainstAverage" data-dir="asc"  title="Goals Against Average — lower is better">GAA</th>
+              <th class="col-sortable col-num" data-col="shutouts"            data-dir="desc" title="Shutouts — games with zero goals allowed">SO</th>
+              <th                    col-num   title="Total Time on Ice">TOI</th>
+            </tr>
+          </thead>
+          <tbody id="goalie-body">
+            <tr><td colspan="12">Loading goalie stats…</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ── Playoffs ── -->
+    <section id="tab-playoffs" class="tab-panel" role="tabpanel">
+      <div class="section-header"><h2>2026 Playoffs</h2></div>
       <div class="playoff-grid">
-        <article>
+        <article class="card">
           <h3>Playoff Series</h3>
-          <ul id="playoff-series-list">
-            <li>Loading playoff series...</li>
-          </ul>
+          <ul id="playoff-series-list"><li>Loading…</li></ul>
         </article>
-
-        <article>
-          <h3>Playoff Games</h3>
-          <ul id="playoff-games-list">
-            <li>Loading playoff games...</li>
-          </ul>
+        <article class="card">
+          <h3>Today's Games</h3>
+          <ul id="playoff-games-list"><li>Loading…</li></ul>
         </article>
-
-        <article>
+        <article class="card">
           <h3>Playoff Team Records</h3>
-          <ul id="playoff-records-list">
-            <li>Loading playoff records...</li>
-          </ul>
+          <ul id="playoff-records-list"><li>Loading…</li></ul>
         </article>
       </div>
     </section>
+
   </main>
 
   <script src="/script.js" defer></script>
