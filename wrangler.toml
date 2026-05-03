@@ -1,6 +1,6 @@
 # Cloudflare Pages configuration
 # Connect this repo in the Cloudflare Pages dashboard and Wrangler will use this file.
-# Build settings: leave "Build command" blank (no build step) and set "Build output directory" to "/"
+# Build settings: leave "Build command" blank (no build step) and set "Build output directory" to "."
 # GitHub Pages still works via the docs/ folder (Settings → Pages → Branch: main, Folder: /docs)
 
 name = "nhl-stats"
